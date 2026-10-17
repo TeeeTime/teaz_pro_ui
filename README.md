@@ -10,7 +10,7 @@ are in `teaz_pro/docs/STYLE_GUIDE.md`.
 Distributed straight from GitHub, pinned to a tag:
 
 ```sh
-npm install github:TeeeTime/teaz_pro_ui#v0.3.0
+npm install github:TeeeTime/teaz_pro_ui#v0.4.0
 ```
 
 npm clones the repo and runs `prepare` (= `npm run build`), so `dist/` is
@@ -55,9 +55,10 @@ useTheme() // applies the saved/system theme to <html data-theme>
 | `GridLayout`, `GridItem` | Square-cell, container-query-driven grid. Details: [`src/components/grid/README.md`](src/components/grid/README.md). |
 | `TopBar` | App header: `appName` (or slot) on the left, optional `homeUrl` home button, avatar menu with built-in theme cycling, emits `select`. |
 | `Icon` | `<Icon name="box" />`, name-based lookup over `@lucide/vue`. Add icons in `src/components/icons/Icon.vue`. |
-| `AppTile`, `AgendaTile`, `StatSparklineTile`, `StatusListTile`, `SearchFieldTile` | Presentational tile contents for a `GridItem`. |
+| `AppTile`, `AgendaTile`, `StatSparklineTile`, `StatusListTile`, `ProgressListTile`, `SearchFieldTile` | Presentational tile contents for a `GridItem`. List tiles page through rows that don't fit. |
+| `NoAccessTile` | Stand-in when the user lacks an app's role; use in a non-clickable `GridItem`. |
 | `useTheme()`, `THEMES`, `THEME_LABELS` | Shared theme state (`light` / `dark` / `dark-blue`), persisted in `localStorage`. |
-| `AppStat`, `AgendaEvent`, `StatusRow`, `*Props` | Types. |
+| `AppStat`, `AgendaEvent`, `ProgressRow`, `StatusRow`, `*Props` | Types. |
 | `themes.css`, `base.css`, `style.css` | Tokens, base styles, compiled component styles. |
 
 `src/styles/themes.css` is a copy of `teaz_pro/tokens/themes.css`. Change

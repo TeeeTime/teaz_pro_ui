@@ -11,6 +11,7 @@ import {
   CreditCard,
   FileBarChart,
   FileText,
+  GraduationCap,
   Headphones,
   House,
   LogOut,
@@ -65,6 +66,7 @@ const ICONS = {
   theme: SunMoon,
   'trend-up': TrendingUp,
   'trend-down': TrendingDown,
+  study: GraduationCap,
   home: House,
 } as const
 

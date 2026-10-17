@@ -1,6 +1,6 @@
 {
   "name": "@teeetime/teaz-pro-ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Shared Vue 3 components and theme tokens for Teaz apps.",
   "type": "module",
   "repository": {

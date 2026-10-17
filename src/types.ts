@@ -11,6 +11,12 @@ export interface AgendaEvent {
   title: string
 }
 
+export interface ProgressRow {
+  label: string
+  /** 0-100; values outside are clamped. */
+  percent: number
+}
+
 export interface StatusRow {
   label: string
   state: 'good' | 'warning' | 'critical'

@@ -19,8 +19,12 @@ export { default as StatSparklineTile } from './components/tiles/StatSparklineTi
 export type { StatSparklineTileProps } from './components/tiles/StatSparklineTile.vue'
 export { default as StatusListTile } from './components/tiles/StatusListTile.vue'
 export type { StatusListTileProps } from './components/tiles/StatusListTile.vue'
+export { default as ProgressListTile } from './components/tiles/ProgressListTile.vue'
+export type { ProgressListTileProps } from './components/tiles/ProgressListTile.vue'
+export { default as NoAccessTile } from './components/tiles/NoAccessTile.vue'
+export type { NoAccessTileProps } from './components/tiles/NoAccessTile.vue'
 
 export { useTheme, THEMES, THEME_LABELS } from './composables/useTheme'
 export type { ThemeName } from './composables/useTheme'
 
-export type { AppStat, AgendaEvent, StatusRow } from './types'
+export type { AppStat, AgendaEvent, ProgressRow, StatusRow } from './types'
