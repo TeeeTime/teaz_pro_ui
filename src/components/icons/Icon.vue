@@ -12,6 +12,7 @@ import {
   FileBarChart,
   FileText,
   Headphones,
+  House,
   LogOut,
   MessageSquare,
   Package,
@@ -64,6 +65,7 @@ const ICONS = {
   theme: SunMoon,
   'trend-up': TrendingUp,
   'trend-down': TrendingDown,
+  home: House,
 } as const
 
 export interface IconProps {

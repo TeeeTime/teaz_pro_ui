@@ -10,7 +10,7 @@ are in `teaz_pro/docs/STYLE_GUIDE.md`.
 Distributed straight from GitHub, pinned to a tag:
 
 ```sh
-npm install github:TeeeTime/teaz_pro_ui#v0.2.0
+npm install github:TeeeTime/teaz_pro_ui#v0.3.0
 ```
 
 npm clones the repo and runs `prepare` (= `npm run build`), so `dist/` is
@@ -39,7 +39,7 @@ useTheme() // applies the saved/system theme to <html data-theme>
 </script>
 
 <template>
-  <TopBar user-name="Jane Doe"><span>My App</span></TopBar>
+  <TopBar app-name="Inventory" home-url="https://portal.teaz.pro" user-name="Jane Doe" />
   <GridLayout :columns="4">
     <GridItem clickable aria-label="Docs">
       <AppTile icon="docs" name="Docs" compact />
@@ -53,7 +53,7 @@ useTheme() // applies the saved/system theme to <html data-theme>
 | Export | What |
 | ------ | ---- |
 | `GridLayout`, `GridItem` | Square-cell, container-query-driven grid. Details: [`src/components/grid/README.md`](src/components/grid/README.md). |
-| `TopBar` | App header: left slot for branding, avatar menu with built-in theme cycling, emits `select`. |
+| `TopBar` | App header: `appName` (or slot) on the left, optional `homeUrl` home button, avatar menu with built-in theme cycling, emits `select`. |
 | `Icon` | `<Icon name="box" />`, name-based lookup over `@lucide/vue`. Add icons in `src/components/icons/Icon.vue`. |
 | `AppTile`, `AgendaTile`, `StatSparklineTile`, `StatusListTile`, `SearchFieldTile` | Presentational tile contents for a `GridItem`. |
 | `useTheme()`, `THEMES`, `THEME_LABELS` | Shared theme state (`light` / `dark` / `dark-blue`), persisted in `localStorage`. |
