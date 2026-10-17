@@ -10,7 +10,7 @@ are in `teaz_pro/docs/STYLE_GUIDE.md`.
 Distributed straight from GitHub, pinned to a tag:
 
 ```sh
-npm install github:TeeeTime/teaz_pro_ui#v0.1.0
+npm install github:TeeeTime/teaz_pro_ui#v0.2.0
 ```
 
 npm clones the repo and runs `prepare` (= `npm run build`), so `dist/` is
