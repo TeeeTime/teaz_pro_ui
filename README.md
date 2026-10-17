@@ -78,4 +78,6 @@ To try changes in an app before releasing, from the app's `frontend/`:
 
 1. Bump `version` in `package.json`, commit.
 2. `git tag v<version> && git push --follow-tags`
-3. In each app: update the `#v<version>` in its `package.json`, `npm install`.
+3. In each app's `frontend/`: `npm install github:TeeeTime/teaz_pro_ui#v<version>`
+   (a plain `npm install` after editing `package.json` keeps the old commit
+   from the lock file).
