@@ -9,20 +9,24 @@ import {
   ChevronLeft,
   ChevronRight,
   CreditCard,
+  ExternalLink,
   FileBarChart,
   FileText,
+  Footprints,
   GraduationCap,
   Headphones,
   House,
   LogOut,
   MessageSquare,
   Package,
+  RefreshCw,
   Search,
   Settings,
   Shield,
   SunMoon,
   TrendingDown,
   TrendingUp,
+  Unlink,
   User,
 } from '@lucide/vue'
 
@@ -68,6 +72,10 @@ const ICONS = {
   'trend-down': TrendingDown,
   study: GraduationCap,
   home: House,
+  run: Footprints,
+  refresh: RefreshCw,
+  external: ExternalLink,
+  unlink: Unlink,
 } as const
 
 export interface IconProps {
