@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Clock,
   CreditCard,
   ExternalLink,
   FileBarChart,
@@ -76,6 +77,7 @@ const ICONS = {
   refresh: RefreshCw,
   external: ExternalLink,
   unlink: Unlink,
+  clock: Clock,
 } as const
 
 export interface IconProps {
