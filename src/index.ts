@@ -8,6 +8,9 @@ export type { IconProps } from './components/icons/Icon.vue'
 
 export { default as TopBar } from './components/layout/TopBar.vue'
 export type { TopBarProps, TopBarMenuItem } from './components/layout/TopBar.vue'
+export { default as Avatar } from './components/layout/Avatar.vue'
+export type { AvatarProps } from './components/layout/Avatar.vue'
+export { ACCOUNT_URL, avatarUrl } from './avatar'
 
 export { default as AppTile } from './components/tiles/AppTile.vue'
 export type { AppTileProps } from './components/tiles/AppTile.vue'

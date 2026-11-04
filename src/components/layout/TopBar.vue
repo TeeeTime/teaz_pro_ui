@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
+import Avatar from './Avatar.vue'
 import Icon from '../icons/Icon.vue'
 import { useTheme } from '../../composables/useTheme'
 
@@ -17,6 +18,8 @@ export interface TopBarProps {
    */
   homeUrl?: string
   userName?: string
+  /** Profile picture, usually `avatarUrl(user.id, 64)`. Without one the initials of userName show. */
+  avatarUrl?: string
   menuItems?: TopBarMenuItem[]
 }
 
@@ -29,11 +32,10 @@ export interface TopBarProps {
  * specifically so every app gets working, consistent theme switching for
  * free just by using TopBar — nothing to wire up per app.
  */
-const props = withDefaults(defineProps<TopBarProps>(), {
+withDefaults(defineProps<TopBarProps>(), {
   userName: 'Guest User',
   menuItems: () => [
-    { label: 'Profile', icon: 'user' },
-    { label: 'Settings', icon: 'gear' },
+    { label: 'Account', icon: 'user' },
     { label: 'Sign out', icon: 'logout' },
   ],
 })
@@ -41,15 +43,6 @@ const props = withDefaults(defineProps<TopBarProps>(), {
 const emit = defineEmits<{ select: [TopBarMenuItem] }>()
 
 const { theme, themeLabels, cycleTheme } = useTheme()
-
-const initials = computed(() =>
-  props.userName
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join(''),
-)
 
 const isOpen = ref(false)
 const rootEl = ref<HTMLElement | null>(null)
@@ -113,7 +106,7 @@ onBeforeUnmount(() => {
         :aria-label="`Account menu for ${userName}`"
         @click="toggle"
       >
-        {{ initials }}
+        <Avatar :src="avatarUrl" :name="userName" round />
       </button>
 
       <ul v-if="isOpen" class="topbar__menu" role="menu">
@@ -211,24 +204,19 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  padding: 0;
   /* Deliberate exception to the no-rounded-corners rule — see
      STYLE_GUIDE.md. An avatar is conventionally round; this is the one
      UI-chrome element where that convention wins over the house default. */
   border-radius: 50%;
   font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-on-accent);
-  background-color: var(--color-accent);
+  background: none;
   border: none;
   cursor: pointer;
-  transition: background-color var(--transition-fast);
 }
 
 .topbar__avatar:hover {
-  background-color: var(--color-accent-hover);
+  --avatar-background: var(--color-accent-hover);
 }
 
 .topbar__avatar:focus-visible {
