@@ -52,7 +52,7 @@ useTheme() // applies the saved/system theme to <html data-theme>
 
 | Export | What |
 | ------ | ---- |
-| `GridLayout`, `GridItem` | Square-cell, container-query-driven grid. Details: [`src/components/grid/README.md`](src/components/grid/README.md). |
+| `GridLayout`, `GridItem` | Square-cell, container-query-driven grid, with an optional phone mode. Details: [`src/components/grid/README.md`](src/components/grid/README.md). |
 | `TopBar` | App header: `appName` (or slot) on the left, optional `homeUrl` home button, avatar menu with built-in theme cycling and optional `avatarUrl` picture, emits `select`. The default menu is Account / Sign out. |
 | `Avatar`, `avatarUrl()`, `ACCOUNT_URL` | A user's profile picture with an initials fallback; `avatarUrl(id, size)` builds its URL at `account.teaz.pro` from the Keycloak user id. |
 | `Icon` | `<Icon name="box" />`, name-based lookup over `@lucide/vue`. Add icons in `src/components/icons/Icon.vue`. |

@@ -20,6 +20,9 @@ Props:
 | `gap`        | `number \| string` | `16`    | Number = pixels. String passes through (`'1rem'`). |
 | `responsive` | `boolean`          | `true`  | Shrinks columns on narrow containers, see below.   |
 | `dense`      | `boolean`          | `true`  | `grid-auto-flow: dense` — later items fill gaps left by multi-span cells. |
+| `phone`      | `boolean`          | `false` | Phone grid on containers up to 640px, see "Phone mode". |
+| `phoneColumns` | `number`         | `6`     | Columns of the phone grid.                        |
+| `phoneRowHeight` | `number \| string` | `56` | Height of one phone grid row (minimum, for auto-height items). |
 
 Renders two nested elements, not one: an outer `.grid-root` (just a
 `container-type: inline-size` carrier) wrapping the inner `.grid-layout`
@@ -56,10 +59,50 @@ Props:
 | `clickable`  | `boolean` | `false` | Adds button semantics, hover/focus affordance. |
 | `disabled`   | `boolean` | `false` | Dims and disables interaction.                |
 | `ariaLabel`  | `string`  | —       | For `clickable` items without visible text.    |
+| `phoneColSpan` | `number` | full width | Columns to span in the phone grid.          |
+| `phoneRowSpan` | `number \| 'auto'` | `'auto'` | Rows in the phone grid; `'auto'` grows to fit the content. |
+| `phoneOrder` | `number`  | `0`     | CSS `order` in the phone grid only.            |
 
 Emits `click: [MouseEvent | KeyboardEvent]`. Sets only `grid-column: span N`
 / `grid-row: span N` — deliberately **no** `aspect-ratio` (see below for
-why that's not just unnecessary but actively wrong here).
+why that's not just unnecessary but actively wrong here). It sets them
+through custom properties (`--grid-item-col`, `--grid-item-row`, and the
+`--grid-item-phone-*` ones), not inline `grid-column`/`grid-row`: inline
+styles would beat the phone grid's rule.
+
+## Phone mode
+
+Square cells don't work on a phone: at one or two columns every tile is a
+tall square, and a tile spanning more columns than are left adds implicit
+columns and breaks the layout. With `phone` on, a `GridLayout` up to 640px
+wide (its own width, via the same container query as the breakpoints)
+switches to a separate grid instead of the 2- and 1-column steps:
+
+- `phoneColumns` (default 6) equal columns, so a cell can be full width
+  (6), half (3) or a third (2).
+- Rows `phoneRowHeight` high (default 56px), no longer tied to the column
+  width.
+- Each `GridItem` is placed by `phoneColSpan` (default full width),
+  `phoneRowSpan` and `phoneOrder`. Above 640px these are ignored, and the
+  desktop placement (`colSpan`, `rowSpan`, source order) is untouched.
+
+`phoneRowSpan` is either a number of rows (a fixed height, for content that
+fills what it's given: charts, lists that show as many rows as fit) or
+`'auto'` (the default): the item's row grows to fit its content
+(`grid-auto-rows: minmax(phoneRowHeight, auto)`). Fixed items get
+`contain: size`, so their content takes the item's height and never pushes
+a row taller; only auto items size their row. Content that measures its own
+height to decide how much to show must be given a fixed `phoneRowSpan`, or
+it can shrink itself. `StatusListTile` and `ProgressListTile` work with
+`'auto'`: they then show every row, without paging.
+
+```vue
+<GridLayout :columns="5" phone>
+  <GridItem :col-span="2" :row-span="2" :phone-row-span="4">…chart…</GridItem>
+  <GridItem :phone-col-span="3" :phone-row-span="3" :phone-order="1">…</GridItem>
+  <GridItem>…a list, full width, as tall as its rows on phones…</GridItem>
+</GridLayout>
+```
 
 ### Why the cells are square
 
