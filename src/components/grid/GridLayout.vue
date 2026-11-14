@@ -10,6 +10,17 @@ export interface GridLayoutProps {
   responsive?: boolean
   /** Let later items fill earlier gaps left by multi-span cells. */
   dense?: boolean
+  /**
+   * On containers up to 640px wide, switch to a phone grid: `phoneColumns`
+   * narrow columns and rows of `phoneRowHeight` that grow with their content,
+   * sized per item by GridItem's `phoneColSpan` / `phoneRowSpan`. Off by
+   * default; above 640px nothing changes either way.
+   */
+  phone?: boolean
+  /** Columns of the phone grid; an item spans some of them (`phoneColSpan`). */
+  phoneColumns?: number
+  /** Height of one phone grid row. Number is treated as pixels. */
+  phoneRowHeight?: number | string
 }
 
 const props = withDefaults(defineProps<GridLayoutProps>(), {
@@ -17,14 +28,30 @@ const props = withDefaults(defineProps<GridLayoutProps>(), {
   gap: 16,
   responsive: true,
   dense: true,
+  phone: false,
+  phoneColumns: 6,
+  phoneRowHeight: 56,
 })
 
-const gapCss = computed(() => (typeof props.gap === 'number' ? `${props.gap}px` : props.gap))
+function css(length: number | string): string {
+  return typeof length === 'number' ? `${length}px` : length
+}
+
+const gapCss = computed(() => css(props.gap))
+
+const rootStyle = computed(() => ({
+  '--grid-columns-configured': props.columns,
+  '--grid-gap': gapCss.value,
+  ...(props.phone ? { '--grid-phone-columns': props.phoneColumns, '--grid-phone-row-height': css(props.phoneRowHeight) } : {}),
+}))
 </script>
 
 <template>
-  <div class="grid-root" :style="{ '--grid-columns-configured': columns, '--grid-gap': gapCss }">
-    <div class="grid-layout" :class="{ 'grid-layout--dense': dense, 'grid-layout--responsive': responsive }">
+  <div class="grid-root" :style="rootStyle">
+    <div
+      class="grid-layout"
+      :class="{ 'grid-layout--dense': dense, 'grid-layout--responsive': responsive, 'grid-layout--phone': phone }"
+    >
       <slot />
     </div>
   </div>
@@ -117,6 +144,42 @@ const gapCss = computed(() => (typeof props.gap === 'number' ? `${props.gap}px` 
   .grid-layout {
     grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
     grid-auto-rows: auto;
+  }
+}
+</style>
+
+<!--
+  Phone grid. Not scoped: it sizes the GridItems in the slot, which carry
+  GridItem's scope, not this one's. Specificity (three classes) beats
+  GridItem's own `.grid-item[data-v-…]` placement whatever the CSS order.
+-->
+<style>
+@container (max-width: 640px) {
+  /*
+   * Columns split the width evenly; rows are no longer squares tied to the
+   * column width but `--grid-phone-row-height` high, growing when an
+   * item with an auto height needs more (minmax(…, auto)).
+   */
+  .grid-layout.grid-layout--phone {
+    grid-template-columns: repeat(var(--grid-phone-columns), minmax(0, 1fr));
+    grid-auto-rows: minmax(var(--grid-phone-row-height), auto);
+  }
+
+  /*
+   * contain: size keeps an item with a fixed phoneRowSpan from growing its
+   * rows: its content (a chart, a list that fills what it's given) then
+   * takes the item's height and never sets it. Items with an auto height
+   * (.grid-item--phone-auto) are the ones that do size their row.
+   */
+  .grid-layout.grid-layout--phone > .grid-item {
+    grid-column: var(--grid-item-phone-col);
+    grid-row: var(--grid-item-phone-row);
+    order: var(--grid-item-phone-order);
+    contain: size;
+  }
+
+  .grid-layout.grid-layout--phone > .grid-item.grid-item--phone-auto {
+    contain: none;
   }
 }
 </style>

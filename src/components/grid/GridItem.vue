@@ -11,6 +11,18 @@ export interface GridItemProps {
   /** Disables interaction and dims the cell. */
   disabled?: boolean
   ariaLabel?: string
+  /**
+   * Columns this cell spans in GridLayout's phone grid (with `phone` on, on
+   * containers up to 640px). Unset: the full width.
+   */
+  phoneColSpan?: number
+  /**
+   * Rows this cell spans in the phone grid, or 'auto' (the default): one
+   * row that grows to fit the content.
+   */
+  phoneRowSpan?: number | 'auto'
+  /** Position in the phone grid (CSS `order`), so phones can list cells in another order. */
+  phoneOrder?: number
 }
 
 const props = withDefaults(defineProps<GridItemProps>(), {
@@ -18,15 +30,25 @@ const props = withDefaults(defineProps<GridItemProps>(), {
   rowSpan: 1,
   clickable: false,
   disabled: false,
+  phoneRowSpan: 'auto',
 })
 
 const emit = defineEmits<{
   click: [MouseEvent | KeyboardEvent]
 }>()
 
+/*
+ * Placement through custom properties rather than grid-column/grid-row
+ * inline: inline styles would beat GridLayout's phone grid rule, which
+ * switches to the --grid-item-phone-* values on narrow containers.
+ */
+const phoneAuto = computed(() => props.phoneRowSpan === 'auto')
 const style = computed(() => ({
-  gridColumn: `span ${props.colSpan}`,
-  gridRow: `span ${props.rowSpan}`,
+  '--grid-item-col': `span ${props.colSpan}`,
+  '--grid-item-row': `span ${props.rowSpan}`,
+  '--grid-item-phone-col': props.phoneColSpan ? `span ${props.phoneColSpan}` : '1 / -1',
+  '--grid-item-phone-row': phoneAuto.value ? 'auto' : `span ${props.phoneRowSpan}`,
+  '--grid-item-phone-order': props.phoneOrder ?? 0,
 }))
 /*
  * No aspect-ratio here. It used to be set to `colSpan / rowSpan` as a
@@ -52,7 +74,7 @@ function handleClick(event: MouseEvent | KeyboardEvent) {
 <template>
   <div
     class="grid-item"
-    :class="{ 'grid-item--clickable': clickable, 'grid-item--disabled': disabled }"
+    :class="{ 'grid-item--clickable': clickable, 'grid-item--disabled': disabled, 'grid-item--phone-auto': phoneAuto }"
     :style="style"
     :role="clickable ? 'button' : undefined"
     :tabindex="clickable && !disabled ? 0 : undefined"
@@ -68,6 +90,8 @@ function handleClick(event: MouseEvent | KeyboardEvent) {
 
 <style scoped>
 .grid-item {
+  grid-column: var(--grid-item-col);
+  grid-row: var(--grid-item-row);
   display: flex;
   min-width: 0;
   min-height: 0;
